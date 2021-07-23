@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import lombok.Data;
 
 @Data
-@ConfigurationProperties(prefix = "com.lattice.pomfrey")
+@ConfigurationProperties(prefix = "com.hardik.mercury")
 public class OpenApiConfigurationProperties {
 
 	private Swagger swagger = new Swagger();
