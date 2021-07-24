@@ -37,12 +37,13 @@ public class DailyMailSubscriptionScheduler {
 
 	public void addTriggerInDailyMailSubscriptionService(Trigger trigger) {
 		try {
-			this.scheduler.scheduleJob(trigger);
+			this.scheduler.scheduleJob(dailySubscriptionMailSenderJobDetail.getJobDetail(), trigger);
+			log.info("Successfully scheduled trigger with identity: {}", trigger.getKey());
 		} catch (ObjectAlreadyExistsException exception) {
 			log.error("Daily mail sender Trigger Already Added!");
 			throw new EmailAlreadyRegisteredException();
 		} catch (SchedulerException e) {
-			log.error("Unable to add trigger");
+			log.error("Unable to add trigger {}", e);
 		}
 	}
 
@@ -50,7 +51,7 @@ public class DailyMailSubscriptionScheduler {
 		try {
 			this.scheduler.unscheduleJob(new TriggerKey(email));
 		} catch (SchedulerException e) {
-			log.error("Unable to unschedule email from daily mail subscription service");
+			log.error("Unable to unschedule email from daily mail subscription service: {}", e);
 			throw new GenericServerException();
 		}
 	}
@@ -59,7 +60,7 @@ public class DailyMailSubscriptionScheduler {
 		try {
 			return this.scheduler.checkExists(new TriggerKey(emailId));
 		} catch (SchedulerException e) {
-			log.error("Unable to check for trigger existence");
+			log.error("Unable to check for trigger existence: {}", e);
 			throw new GenericServerException();
 		}
 	}
