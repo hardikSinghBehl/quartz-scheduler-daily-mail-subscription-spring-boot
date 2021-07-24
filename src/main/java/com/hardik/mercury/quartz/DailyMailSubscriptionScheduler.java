@@ -9,6 +9,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.hardik.mercury.exception.EmailAlreadyRegisteredException;
+import com.hardik.mercury.exception.GenericServerException;
 import com.hardik.mercury.quartz.configuration.QuartzSchedulerConfiguration;
 import com.hardik.mercury.quartz.job.detail.DailySubscriptionMailSenderJobDetail;
 
@@ -34,16 +35,33 @@ public class DailyMailSubscriptionScheduler {
 		}
 	}
 
-	public void addTriggerInDailyMailSubscriptionService(Trigger trigger) throws SchedulerException {
+	public void addTriggerInDailyMailSubscriptionService(Trigger trigger) {
 		try {
 			this.scheduler.scheduleJob(trigger);
 		} catch (ObjectAlreadyExistsException exception) {
 			log.error("Daily mail sender Trigger Already Added!");
 			throw new EmailAlreadyRegisteredException();
+		} catch (SchedulerException e) {
+			log.error("Unable to add trigger");
 		}
 	}
 
-	public void removeTrigger(final String email) throws SchedulerException {
-		this.scheduler.unscheduleJob(new TriggerKey(email));
+	public void removeTrigger(final String email) {
+		try {
+			this.scheduler.unscheduleJob(new TriggerKey(email));
+		} catch (SchedulerException e) {
+			log.error("Unable to unschedule email from daily mail subscription service");
+			throw new GenericServerException();
+		}
 	}
+
+	public Boolean triggerWithEmailScheduled(final String emailId) {
+		try {
+			return this.scheduler.checkExists(new TriggerKey(emailId));
+		} catch (SchedulerException e) {
+			log.error("Unable to check for trigger existence");
+			throw new GenericServerException();
+		}
+	}
+
 }
