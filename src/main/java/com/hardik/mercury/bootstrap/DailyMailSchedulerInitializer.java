@@ -23,7 +23,7 @@ public class DailyMailSchedulerInitializer implements ApplicationListener<Applic
 			dailyMailSubscriptionScheduler.start();
 			log.info("Successfully initialized daily mail subscription scheduler");
 		} catch (SchedulerException e) {
-			log.error("Unable to initialize daily mail subscription scheduler");
+			log.error("Unable to initialize daily mail subscription scheduler: {}", e);
 		}
 	}
 

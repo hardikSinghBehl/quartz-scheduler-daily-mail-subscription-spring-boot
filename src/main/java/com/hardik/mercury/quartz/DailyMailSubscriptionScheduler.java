@@ -23,21 +23,20 @@ public class DailyMailSubscriptionScheduler {
 	private final DailySubscriptionMailSenderJobDetail dailySubscriptionMailSenderJobDetail;
 
 	public void start() throws SchedulerException {
-		if (!this.scheduler.isStarted()) {
-			this.scheduler.start();
-			this.scheduler.addJob(dailySubscriptionMailSenderJobDetail.getJobDetail(), false);
-		}
+		this.scheduler.start();
+		this.scheduler.addJob(dailySubscriptionMailSenderJobDetail.getJobDetail(), false);
 	}
 
 	public void addTriggerInDailyMailSubscriptionService(Trigger trigger) {
 		try {
-			this.scheduler.scheduleJob(dailySubscriptionMailSenderJobDetail.getJobDetail(), trigger);
+			this.scheduler.scheduleJob(trigger);
 			log.info("Successfully scheduled trigger with identity: {}", trigger.getKey());
 		} catch (ObjectAlreadyExistsException exception) {
 			log.error("Daily mail sender Trigger Already Added!");
 			throw new EmailAlreadyRegisteredException();
 		} catch (SchedulerException e) {
 			log.error("Unable to add trigger {}", e);
+			throw new GenericServerException();
 		}
 	}
 

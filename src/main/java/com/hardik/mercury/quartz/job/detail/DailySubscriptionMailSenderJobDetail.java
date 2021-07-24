@@ -10,7 +10,7 @@ import com.hardik.mercury.quartz.job.DailySubscriptionMailSenderJob;
 public class DailySubscriptionMailSenderJobDetail {
 
 	private static JobDetail jobDetails = JobBuilder.newJob(DailySubscriptionMailSenderJob.class)
-			.withIdentity("daily-subscription-mail-sender-job").build();
+			.withIdentity("daily-subscription-mail-sender-job", "DEFAULT").storeDurably().build();
 
 	public JobDetail getJobDetail() {
 		return jobDetails;
