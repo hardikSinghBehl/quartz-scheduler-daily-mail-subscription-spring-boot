@@ -4,7 +4,6 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.hardik.mercury.mail.EmailService;
 import com.hardik.mercury.utility.ShitQuoteUtility;
@@ -21,7 +20,6 @@ public class DailySubscriptionMailSenderJob implements Job {
 
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
-		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
 		final var emailId = context.getTrigger().getKey().getName();
 		emailService.sendEmail(emailId, "Daily Quote", ShitQuoteUtility.get());
 		log.info("Sent daily quote to: {}", emailId);
