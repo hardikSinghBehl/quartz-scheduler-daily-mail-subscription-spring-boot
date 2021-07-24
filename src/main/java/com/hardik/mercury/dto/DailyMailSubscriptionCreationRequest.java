@@ -3,14 +3,13 @@ package com.hardik.mercury.dto;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-import com.fasterxml.jackson.databind.annotation.JacksonStdImpl;
-
 import lombok.Builder;
 import lombok.Getter;
+import lombok.extern.jackson.Jacksonized;
 
 @Getter
 @Builder
-@JacksonStdImpl
+@Jacksonized
 public class DailyMailSubscriptionCreationRequest {
 
 	@NotBlank(message = "email-id must not be empty")
