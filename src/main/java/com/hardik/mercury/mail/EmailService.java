@@ -1,12 +1,9 @@
 package com.hardik.mercury.mail;
 
-import java.io.IOException;
-
-import javax.mail.MessagingException;
-
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.hardik.mercury.mail.properties.EmailConfigurationProperties;
@@ -21,7 +18,8 @@ public class EmailService {
 	private final JavaMailSender javaMailSender;
 	private final EmailConfigurationProperties emailConfigurationProperties;
 
-	public void sendEmail(String toMail, String subject, String messageBody) throws IOException, MessagingException {
+	@Async
+	public void sendEmail(String toMail, String subject, String messageBody) {
 		final var simpleMailMessage = new SimpleMailMessage();
 		simpleMailMessage.setFrom(emailConfigurationProperties.getUsername());
 		simpleMailMessage.setTo(toMail);
